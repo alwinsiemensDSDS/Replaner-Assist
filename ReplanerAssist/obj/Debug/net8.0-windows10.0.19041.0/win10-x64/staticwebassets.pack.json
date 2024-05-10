@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\scopedcss\\bundle\\ReplanerAssist.styles.css",
+      "PackagePath": "staticwebassets\\ReplanerAssist.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "C:\\Users\\alwin\\repos\\Replaner Assist\\ReplanerAssist\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.ReplanerAssist.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.build.ReplanerAssist.props",
+      "PackagePath": "build\\ReplanerAssist.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.buildMultiTargeting.ReplanerAssist.props",
+      "PackagePath": "buildMultiTargeting\\ReplanerAssist.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\staticwebassets\\msbuild.buildTransitive.ReplanerAssist.props",
+      "PackagePath": "buildTransitive\\ReplanerAssist.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
