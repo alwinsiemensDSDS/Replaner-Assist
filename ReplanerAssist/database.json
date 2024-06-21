@@ -1,0 +1,42 @@
+{
+    "Personen": [
+      {
+        "PID": 1,
+        "Vorname": "John",
+        "Nachname": "Doe",
+        "Notiz": "Kann Freitags nicht"
+      },
+      {
+        "PiD": 2,
+        "Vorname": "Jeff",
+        "Nachname": "Doe",
+        "Notiz": "Kann heute nicht"
+      }
+    ],
+    "WiederkehrendeAufgaben": [
+      {
+        "WID": 1,
+        "Beschreibung": "Müll rausbringen"
+        
+      },
+      {
+        "WID": 2,
+        "beschreibung": "Blumen gießen"
+      }
+    ],
+    "Termine": [
+      {
+        "TID": 1,
+        "WID": 1,
+        "PID": 1,
+        "datum": "2023-06-21T10:00:00"
+      },
+      {
+        "TID": 2,
+        "WID": 2,
+        "PID": 2,
+        "datum": "2023-06-21T10:00:00"
+      }
+    ]
+  }
+  
