@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace database
+namespace Entity
 {
     public class Termin
     {

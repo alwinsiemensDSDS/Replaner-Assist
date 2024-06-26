@@ -1,5 +1,5 @@
 {
-    "Personen": [
+    "Person": [
       {
         "PID": 1,
         "Vorname": "John",
@@ -10,10 +10,10 @@
         "PiD": 2,
         "Vorname": "Jeff",
         "Nachname": "Doe",
-        "Notiz": "Kann heute nicht"
+        "Notiz": "Kann Dienstags nicht"
       }
     ],
-    "WiederkehrendeAufgaben": [
+    "WiederkehrendeAufgabe": [
       {
         "WID": 1,
         "Beschreibung": "Müll rausbringen"
@@ -24,7 +24,7 @@
         "beschreibung": "Blumen gießen"
       }
     ],
-    "Termine": [
+    "Termin": [
       {
         "TID": 1,
         "WID": 1,

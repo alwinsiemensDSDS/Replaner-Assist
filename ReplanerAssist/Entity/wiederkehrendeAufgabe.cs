@@ -1,4 +1,4 @@
-namespace database
+namespace Entity
 {
     public class WiederkehrendeAufgabe
     {
