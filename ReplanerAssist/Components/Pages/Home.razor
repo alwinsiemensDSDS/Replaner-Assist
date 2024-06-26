@@ -107,11 +107,11 @@ else
         //First Add some Data to replanerdb
         //
         //for example with: replanerdb.Aufgaben.Add(...)        
-        replanerdb.MockData(); //samples are in this method.
-        //Then Save database
-        await replanerdb.SaveDatabase();
-        //Then reload your UI because the database changed.
-        await LoadDataFromDb();
+        // replanerdb.MockData(); //samples are in this method.
+        // //Then Save database
+        // await replanerdb.SaveDatabase();
+        // //Then reload your UI because the database changed.
+        // await LoadDataFromDb();
     }
     private async Task LoadDataFromDb()
     {
