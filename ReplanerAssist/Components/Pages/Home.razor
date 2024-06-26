@@ -1,15 +1,39 @@
 ﻿@page "/"
 
-<h1>Terminliste von Aufgabe</h1>
+<div class="row text-light">
+    <strong><h4><p class="text-light py-2">Planung für Aufgabe</p></h4></strong>
+</div>
 
-<p>Termin 1 mit Person 1</p>
-<p>Termin 1 mit Person 1</p>
-<p>Termin 1 mit Person 1</p>
-<p>Termin 1 mit Person 1</p>
-<p>Termin 1 mit Person 1</p>
-<p>Termin 1 mit Person 1</p>
+<div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
+@for (int i = 0; i <10; i++)
+{
+    <div class="row text-light gy-1">
+        <div class="col">
+            <span>DATUM PLATZHALTER </span>
+            <button class="btn-small fs-6"><span class="bi-pencil"></span></button>
 
+            <ul>
+                <li>Max Mustermann</li>
+                <li>Mustermann Max</li>
+            </ul>
+        </div>
+        <hr />
+    </div>
+}
+</div>
 
 <div>
-    <ReplanerAssist.Components.Layout.BottomNavBar/>
+    <ReplanerAssist.Components.Layout.BottomNavBar />
 </div>
+
+<style>
+    .btn-small {
+        background-color: transparent;
+        color: white;
+        border-color: transparent;
+        box-shadow: none;
+        text-decoration: none;
+        font-size: 7px;
+        padding-left: 40px;
+    }
+</style>
