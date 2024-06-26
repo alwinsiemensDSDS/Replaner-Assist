@@ -1,4 +1,4 @@
-namespace Entity
+namespace ReplanerAssist.Entity
 {
     public class WiederkehrendeAufgabe
     {

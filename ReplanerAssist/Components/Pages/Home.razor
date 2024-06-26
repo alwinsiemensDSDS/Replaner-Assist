@@ -1,27 +1,77 @@
 ﻿@page "/"
+@using ReplanerAssist.Database
+@using ReplanerAssist.Entity
+@using ReplanerAssist.database
+@inject IReplanerDB replanerdb;
 
-<div class="row text-light">
-    <strong><h4><p class="text-light py-2">Planung für Aufgabe</p></h4></strong>
-</div>
 
-<div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
-@for (int i = 0; i <10; i++)
+@if(loaded == false)
 {
-    <div class="row text-light gy-1">
-        <div class="col">
-            <span>DATUM PLATZHALTER </span>
-            <button class="btn-small fs-6"><span class="bi-pencil"></span></button>
-
-            <ul>
-                <li>Max Mustermann</li>
-                <li>Mustermann Max</li>
-            </ul>
-        </div>
-        <hr />
-    </div>
+   
+    @if (error)
+    {
+        <p>Error: etwas stimmt mit den Daten so garnicht.</p>
+    }
+    else
+    {
+        if (empty)
+        {
+            <p>Nichts da - fühl dich frei und füge was hinzu!</p>
+        }
+        else
+        {
+            <p>Daten werden gerade geladen</p>
+        }
+        
+    }
 }
-</div>
+else
+{  
+    if (no_aufgaben)
+    {
+        <p>Erstelle deine erste Aufgabe (unten rechts)!</p>
+    }else
+    {
+        if (aufgabe_no_termine)
+        {
+            <p>Erstelle deinen ersten Termin!</p>
+        }
+        else
+        {
+            <div class="row text-light">
+                <strong><h4><p class="text-light py-2">Planung für '@replanerdb.selectedAufgabe?.Titel'</p></h4></strong>
+            </div>
+            <div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
+                @foreach (Termin termin in Terminliste!)
+                {
+                    <div class="row text-light m-0">
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <span>@termin.Datum.ToShortDateString() </span>
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                <button @onclick="() => clickEditTermin(termin)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
+                            </div>
+                        </div>
+                        <div class="row ms-1">
+                            <ul style="list-style-type:disc">
+                                @foreach (var person in termin.PersonenListe)
+                                {
+                                    <li>@person.Vorname @person.Nachname</li>
+                                }
+                            </ul>
+                        </div>
 
+                        <hr />
+                    </div>
+                }
+            </div>
+        }
+        
+    }
+       
+    
+}
 <div>
     <ReplanerAssist.Components.Layout.BottomNavBar />
 </div>
@@ -37,3 +87,68 @@
         padding-left: 40px;
     }
 </style>
+
+@code {
+
+    public bool loaded;
+    public bool error;
+    public bool empty;
+    public bool aufgabe_no_termine;
+    public bool no_aufgaben;
+    List<Termin>? Terminliste;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Terminliste = new List<Termin>();
+        
+        await LoadDataFromDb();
+        //How to add Data
+
+        //First Add some Data to replanerdb
+        //
+        //for example with: replanerdb.Aufgaben.Add(...)        
+        replanerdb.MockData(); //samples are in this method.
+        //Then Save database
+        await replanerdb.SaveDatabase();
+        //Then reload your UI because the database changed.
+        await LoadDataFromDb();
+    }
+    private async Task LoadDataFromDb()
+    {
+
+        var result = await replanerdb.LoadDatabase();
+        if (result == DbReturnType.SuccessFull)
+        {
+            if (replanerdb.selectedAufgabe != null)
+            {
+                Terminliste = replanerdb.GetTermineForAufgabe(replanerdb.selectedAufgabe);
+                if (Terminliste.Count == 0)
+                {
+                    aufgabe_no_termine = true;
+                }
+            }
+            if (replanerdb.selectedAufgabe == null)
+            {
+                no_aufgaben = true;
+            }
+            
+            loaded = true;
+        }
+        if (result == DbReturnType.Error)
+        {
+            error = true;
+        }
+        if (result == DbReturnType.Empty)
+        {
+            empty = true;
+        }
+        
+    }
+
+    private void clickEditTermin(Termin termin)
+    {
+        Console.WriteLine(termin.ToString());
+    }
+
+
+}

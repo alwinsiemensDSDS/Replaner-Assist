@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ReplanerAssist.Database;
 
 namespace ReplanerAssist;
 
@@ -18,6 +19,7 @@ public static class MauiProgram
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
+		builder.Services.AddSingleton<IReplanerDB,ReplanerDB>();
 		builder.Logging.AddDebug();
 #endif
 
