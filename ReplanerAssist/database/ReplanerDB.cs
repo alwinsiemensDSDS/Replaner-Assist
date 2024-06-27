@@ -1,3 +1,4 @@
+using Microsoft.Maui.Storage;
 using ReplanerAssist.database;
 using ReplanerAssist.Entity;
 
@@ -30,10 +31,13 @@ namespace ReplanerAssist.Database
             {
                 File.Create(filePath);
             }
-            using Stream fileStream = System.IO.File.OpenRead(filePath);
-            using StreamReader reader = new StreamReader(fileStream);
+            else {
+                using Stream fileStream = System.IO.File.OpenRead(filePath);
+                using StreamReader reader = new StreamReader(fileStream);
 
-            json = await reader.ReadToEndAsync();
+                json = await reader.ReadToEndAsync();
+            }
+         
 
             if (json == "")
             {
@@ -51,7 +55,6 @@ namespace ReplanerAssist.Database
                 Console.WriteLine("Database couldn't be deserialized");
                 return DbReturnType.Error;
             }
-
 
             Termine = loaded_db!.Termine;
             Personen = loaded_db!.Personen;
@@ -110,7 +113,7 @@ namespace ReplanerAssist.Database
 
         public List<Termin> GetTermineForAufgabe(WiederkehrendeAufgabe aufgabe)
         {
-            return Termine.FindAll(termin => termin.Aufgabe == aufgabe);
+            return Termine.FindAll(termin => termin.Aufgabe.WID == aufgabe.WID);
         }
 
         public void MockData()
@@ -118,6 +121,8 @@ namespace ReplanerAssist.Database
             Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 3], TID = 1, WID = 1 });
             Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 2], TID = 2, WID = 2 });
             Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 4], TID = 3, WID = 2 });
+
+       
 
             Personen.Add(new Person() { PID = 1, Vorname = "Alwin", Nachname = "Siemens", Notiz = "Alwin ist cool" });
             Personen.Add(new Person() { PID = 2, Vorname = "Johannes", Nachname = "Just", Notiz = "" });
@@ -135,7 +140,7 @@ namespace ReplanerAssist.Database
             string json = System.Text.Json.JsonSerializer.Serialize(this);
             //save to database
 
-            using FileStream outputStream = System.IO.File.OpenWrite(filePath);
+            using FileStream outputStream = System.IO.File.Create(filePath);
             using StreamWriter streamWriter = new StreamWriter(outputStream);
 
             await streamWriter.WriteAsync(json);

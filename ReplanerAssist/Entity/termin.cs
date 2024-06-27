@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text.Json.Serialization;
 
 namespace ReplanerAssist.Entity
 {
@@ -9,7 +10,10 @@ namespace ReplanerAssist.Entity
         public List<int> PersonenIDs { get; set; }
         public DateTime Datum { get; set; }
 
+        [JsonIgnore]
         public List<Person> PersonenListe { get; set; }
+
+        [JsonIgnore]
         public WiederkehrendeAufgabe Aufgabe { get; set; }
 
         public Termin()

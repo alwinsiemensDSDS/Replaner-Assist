@@ -1,14 +1,28 @@
 ﻿@page "/task-list"
+@using ReplanerAssist.Database
+@using ReplanerAssist.Entity
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation
 
-<h1>Tasks</h1>
-<p>Wähle eine Aufgabe aus</p>
+<div class="row">
+    <h5><p class="text-light">Aufgabenliste</p></h5>
+</div>
+@foreach (var aufgabe in replanerdb.Aufgaben)
+{
+    <div class="form-check text-light">
+        <input class="form-check-input" @onchange="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked = "@(replanerdb.selectedAufgabe.WID == aufgabe.WID)">
+        <label class="form-check-label" for="flexRadioDefault1">
+            @aufgabe.Titel
+        </label>
+        <p class="text-light p-2">@aufgabe.Beschreibung</p>
+    </div>
+}
 
-<NavLink href="">Diese Aufgabe wählen</NavLink>
 
 <div>
        <nav class="navbar fixed-bottom nav_bar container-fluid">
       <div class="row w-100 m-0 gx-0">
-        <div class="col d-flex justify-content-start"><NavLink href=""><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
+        <div class="col d-flex justify-content-start"><NavLink href="/"><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
         <div class="col d-flex justify-content-center"><NavLink href="add-task"><button class="btn-primary fs-1 px-4" ><span class="bi-plus-circle-fill"></span></button></NavLink></div>
         <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4" ><span class=""></span></button></NavLink></div>
       </div> 
@@ -37,3 +51,12 @@
     }
 
 </style>
+
+@code {
+    public async Task SwitchAufgabe(WiederkehrendeAufgabe aufgabe)
+    {
+        replanerdb.selectedAufgabe = aufgabe;
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/");
+    }
+}

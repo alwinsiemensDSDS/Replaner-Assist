@@ -34,6 +34,9 @@ else
     {
         if (aufgabe_no_termine)
         {
+            <div class="row text-light">
+                <strong><h4><p class="text-light py-2">Planung für '@replanerdb.selectedAufgabe?.Titel'</p></h4></strong>
+            </div>
             <p>Erstelle deinen ersten Termin!</p>
         }
         else
@@ -100,17 +103,15 @@ else
     protected override async Task OnInitializedAsync()
     {
         Terminliste = new List<Termin>();
-        
+
         await LoadDataFromDb();
         //How to add Data
 
         //First Add some Data to replanerdb
         //
         //for example with: replanerdb.Aufgaben.Add(...)        
-        // replanerdb.MockData(); //samples are in this method.
-        // //Then Save database
+        // replanerdb.MockData();
         // await replanerdb.SaveDatabase();
-        // //Then reload your UI because the database changed.
         // await LoadDataFromDb();
     }
     private async Task LoadDataFromDb()
@@ -141,6 +142,7 @@ else
         if (result == DbReturnType.Empty)
         {
             empty = true;
+
         }
         
     }
