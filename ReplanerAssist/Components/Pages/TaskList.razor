@@ -16,7 +16,7 @@ else
     @foreach (var aufgabe in replanerdb.Aufgaben)
     {
         <div class="form-check text-light">
-            <input class="form-check-input" @onchange="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)">
+            <input class="form-check-input" @onchange="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)"><button @onclick="() => editAufgabe(aufgabe)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
             <label class="form-check-label" for="flexRadioDefault1">
                 @aufgabe.Titel
             </label>
@@ -83,5 +83,10 @@ else
 
         await replanerdb.SaveDatabase();
 
+    }
+
+    public void editAufgabe(WiederkehrendeAufgabe aufgabe)
+    {
+        
     }
 }
