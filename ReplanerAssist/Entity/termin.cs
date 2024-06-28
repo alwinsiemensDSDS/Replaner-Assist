@@ -5,9 +5,9 @@ namespace ReplanerAssist.Entity
 {
     public class Termin
     {
-        public int TID { get; set; }
-        public int WID { get; set; }
-        public List<int> PersonenIDs { get; set; }
+        public string TID { get; set; }
+        public string WID { get; set; }
+        public List<string> PersonenIDs { get; set; }
         public DateTime Datum { get; set; }
 
         [JsonIgnore]
@@ -19,6 +19,8 @@ namespace ReplanerAssist.Entity
         public Termin()
         {
             PersonenListe = new List<Person>();
+            PersonenIDs = new List<string>();
+            TID = Guid.NewGuid().ToString();
         }
     }
 }

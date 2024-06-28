@@ -79,19 +79,24 @@ namespace ReplanerAssist.Database
             {
                 foreach (var termin in Termine)
                 {
-                    //Add Person-Objects to Termin
-                    foreach (var person_id in termin.PersonenIDs)
+                    if (termin.PersonenIDs.Count != 0)
                     {
-                        Person person = Personen.FirstOrDefault(person => person.PID == person_id)!;
-                        if (person != null)
+                        //Add Person-Objects to Termin
+                        foreach (var person_id in termin.PersonenIDs)
                         {
-                            termin.PersonenListe.Add(person);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Person with id " + person_id + " not found in db");
+                            Person person = Personen.FirstOrDefault(person => person.PID == person_id)!;
+                            if (person != null)
+                            {
+                                termin.PersonenListe.Add(person);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Person with id " + person_id + " not found in db");
+                            }
                         }
                     }
+                    
+                    
 
                     //Add Wiederkehrende-Aufgabe-Object to Termin
                     WiederkehrendeAufgabe aufgabe = Aufgaben.FirstOrDefault(aufgabe => aufgabe.WID == termin.WID)!;
@@ -118,21 +123,21 @@ namespace ReplanerAssist.Database
 
         public void MockData()
         {
-            Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 3], TID = 1, WID = 1 });
-            Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 2], TID = 2, WID = 2 });
-            Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 4], TID = 3, WID = 2 });
+            //Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 3], TID = 1, WID = 1 });
+            //Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 2], TID = 2, WID = 2 });
+            //Termine.Add(new Termin() { Datum = DateTime.Now, PersonenIDs = [1, 4], TID = 3, WID = 2 });
 
-       
 
-            Personen.Add(new Person() { PID = 1, Vorname = "Alwin", Nachname = "Siemens", Notiz = "Alwin ist cool" });
-            Personen.Add(new Person() { PID = 2, Vorname = "Johannes", Nachname = "Just", Notiz = "" });
-            Personen.Add(new Person() { PID = 3, Vorname = "Pascal", Nachname = "namenlos", Notiz = "" });
-            Personen.Add(new Person() { PID = 4, Vorname = "Rafail", Nachname = "Kalendaris", Notiz = "Kalender" });
 
-            Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 1, Titel = "Aufr‰umen", Beschreibung = "JOJOJOJOJJ" });
-            Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 2, Titel = "Blumen gieﬂen", Beschreibung = "" });
-            Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 3, Titel = "predigen", Beschreibung = "" });
-            Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 4, Titel = "was anderes machen", Beschreibung = "" });
+            //Personen.Add(new Person() { PID = 1, Vorname = "Alwin", Nachname = "Siemens", Notiz = "Alwin ist cool" });
+            //Personen.Add(new Person() { PID = 2, Vorname = "Johannes", Nachname = "Just", Notiz = "" });
+            //Personen.Add(new Person() { PID = 3, Vorname = "Pascal", Nachname = "namenlos", Notiz = "" });
+            //Personen.Add(new Person() { PID = 4, Vorname = "Rafail", Nachname = "Kalendaris", Notiz = "Kalender" });
+
+            //Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 1, Titel = "Aufr‰umen", Beschreibung = "JOJOJOJOJJ" });
+            //Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 2, Titel = "Blumen gieﬂen", Beschreibung = "" });
+            //Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 3, Titel = "predigen", Beschreibung = "" });
+            //Aufgaben.Add(new WiederkehrendeAufgabe() { WID = 4, Titel = "was anderes machen", Beschreibung = "" });
         }
 
         public async Task SaveDatabase()

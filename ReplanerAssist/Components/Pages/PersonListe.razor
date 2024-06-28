@@ -1,19 +1,47 @@
 ﻿@page "/person-list"
+@using ReplanerAssist.Database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
 
-<h1>Personen</h1>
-<p>Person 1</p>
-<p>Person 2</p>
-<p>Person 3</p>
-<p>Person 4</p>
-<p>Person 5</p>
-<p>Person 6</p>
+
+<div class="row">
+    <h5 class="text-light">
+        Personenliste
+    </h5>
+</div>
+@if (replanerdb.Personen.Count == 0)
+{
+   <p>Es sind keine Personen angelegt</p>
+}
+else
+{
+    @foreach (var person in replanerdb.Personen)
+    {
+        <h6 class="text-light">
+            @person.Vorname @person.Nachname (x Tage her) <button @onclick="() => editPerson(person)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
+        </h6>
+    }
+}
+
+<style>
+    .btn-small {
+        background-color: transparent;
+        color: white;
+        border-color: transparent;
+        box-shadow: none;
+        text-decoration: none;
+        font-size: 7px;
+        padding-left: 40px;
+    }
+</style>
+
 
 
 <div>
        <nav class="navbar fixed-bottom nav_bar container-fluid">
       <div class="row w-100 m-0 gx-0">
         <div class="col d-flex justify-content-start"><NavLink href=""><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
-        <div class="col d-flex justify-content-center"><NavLink href="add-Person"><button class="btn-primary fs-1 px-4" ><span class="bi-plus-circle-fill"></span></button></NavLink></div>
+        <div class="col d-flex justify-content-center"><button @onclick="AddPerson" class="btn-primary fs-1 px-4" ><span class="bi-plus-circle-fill"></span></button></div>
         <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4" ><span class=""></span></button></NavLink></div>
       </div> 
     </nav>
@@ -41,3 +69,21 @@
     }
 
 </style>
+
+@code{
+    public async Task AddPerson()
+    {
+        Entity.Person person = new Entity.Person();
+        person.Vorname = "leer";
+        person.Nachname = "leer";
+        person.Notiz = "leer";
+
+        replanerdb.Personen.Add(person);
+        await replanerdb.SaveDatabase();
+    }
+
+    public async Task editPerson(Entity.Person person)
+    {
+        Navigation.NavigateTo("/edit-person/" + person.PID);
+    }
+}
