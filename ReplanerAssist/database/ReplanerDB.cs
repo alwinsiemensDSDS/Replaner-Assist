@@ -29,7 +29,8 @@ namespace ReplanerAssist.Database
 
             if (!File.Exists(filePath))
             {
-                File.Create(filePath);
+                var file = File.Create(filePath);
+                file.Close();
             }
             else {
                 using Stream fileStream = System.IO.File.OpenRead(filePath);
@@ -118,7 +119,7 @@ namespace ReplanerAssist.Database
 
         public List<Termin> GetTermineForAufgabe(WiederkehrendeAufgabe aufgabe)
         {
-            return Termine.FindAll(termin => termin.Aufgabe.WID == aufgabe.WID);
+            return Termine.FindAll(termin => termin.Aufgabe?.WID == aufgabe.WID);
         }
 
         public void MockData()
