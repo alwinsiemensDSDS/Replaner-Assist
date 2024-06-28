@@ -1,0 +1,55 @@
+﻿@page "/edit-aufgabe/{aufgabewid}"
+@using Entity
+@using ReplanerAssist.Database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
+
+<h3>Edit Aufgabe</h3>
+
+@* <EditForm class="pKreis" Model="aufgabeModel" OnValidSubmit="SaveAufgabe">
+    <div class="form-group text-light">
+        <label for="inputTitel">Titel</label>
+    </div>
+    <div>
+        <button class="btn btn-success" type="submit">Submit</button>
+    </div>
+</EditForm> *@
+
+<button @onclick="DeleteAufgabe" type="button py-2" class="btn btn-warning">Aufgabe Löschen</button>
+
+<style>
+    .pKreis {
+        background-color: #222222;
+        margin-top: 20px;
+    }
+
+
+    hr {
+        border: 3px;
+        border-top: 2px solid rgb(255, 255, 255);
+        margin: 0 auto !important;
+        opacity: 80;
+    }
+
+</style>
+
+@code {
+    [Parameter]
+    public string aufgabewid { get; set; }
+
+    WiederkehrendeAufgabe aufgabeModel;
+
+
+    public async Task SaveAufgabe()
+    {
+
+    }
+
+    public async Task DeleteAufgabe()
+    {
+        int index = replanerdb.Aufgaben.FindIndex(aufgabe => aufgabe.WID == aufgabewid);
+        replanerdb.Aufgaben.RemoveAt(index);
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/task-list");
+    }
+}
