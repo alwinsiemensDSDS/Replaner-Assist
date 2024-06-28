@@ -142,14 +142,22 @@ namespace ReplanerAssist.Database
 
         public async Task SaveDatabase()
         {
-            string json = System.Text.Json.JsonSerializer.Serialize(this);
-            //save to database
+            try
+            {
+                string json = System.Text.Json.JsonSerializer.Serialize(this);
+                //save to database
 
-            using FileStream outputStream = System.IO.File.Create(filePath);
-            using StreamWriter streamWriter = new StreamWriter(outputStream);
+                using FileStream outputStream = System.IO.File.Create(filePath);
+                using StreamWriter streamWriter = new StreamWriter(outputStream);
 
-            await streamWriter.WriteAsync(json);
-
+                await streamWriter.WriteAsync(json);
+            }
+            catch (Exception exception)
+            {
+                Console.Write(exception.Message);
+                return;
+            }
+           
         }
     }
 }

@@ -76,8 +76,12 @@ else
         aufgabe.Beschreibung = "Test";
 
         replanerdb.Aufgaben.Add(aufgabe);
+        if (replanerdb.selectedAufgabe == null)
+        {
+            replanerdb.selectedAufgabe = aufgabe;
+        }
+
         await replanerdb.SaveDatabase();
-        // I reload because for updating selectedAufgabe in database
-        await replanerdb.LoadDatabase();
+
     }
 }

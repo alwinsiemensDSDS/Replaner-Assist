@@ -87,7 +87,10 @@ else
     <nav class="navbar fixed-bottom nav_bar container-fluid">
         <div class="row w-100 m-0 gx-0">
             <div class="col d-flex justify-content-start"><NavLink href="task-list"><button class="btn-primary fs-1 px-4"><span class="bi-list-ul"></span></button></NavLink></div>
-            <div class="col d-flex justify-content-center"><button @onclick="AddTermin" class="btn-primary fs-1 px-4"><span class="bi-plus-circle-fill"></span></button></div>
+            @if (replanerdb.Aufgaben.Count != 0 && replanerdb.Personen.Count != 0)
+            {
+                <div class="col d-flex justify-content-center"><button @onclick="AddTermin" class="btn-primary fs-1 px-4"><span class="bi-plus-circle-fill"></span></button></div>
+            }
             <div class="col d-flex justify-content-end"><NavLink href="person-list"><button class="btn-primary fs-1 px-4"><span class="bi-person-square"></span></button></NavLink></div>
         </div>
     </nav>
