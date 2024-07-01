@@ -71,19 +71,7 @@ else
 </style>
 
 @code{
-    public async Task AddPerson()
-    {
-        Entity.Person person = new Entity.Person();
-        person.Vorname = "leer";
-        person.Nachname = "leer";
-        person.Notiz = "leer";
+    public async Task AddPerson() => Navigation.NavigateTo("/edit-person");
 
-        replanerdb.Personen.Add(person);
-        await replanerdb.SaveDatabase();
-    }
-
-    public async Task editPerson(Entity.Person person)
-    {
-        Navigation.NavigateTo("/edit-person/" + person.PID);
-    }
+    public async Task editPerson(Entity.Person person) => Navigation.NavigateTo("/edit-person/" + person.PID);
 }
