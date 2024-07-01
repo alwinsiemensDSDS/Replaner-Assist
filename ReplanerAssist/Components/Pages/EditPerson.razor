@@ -5,7 +5,14 @@
 @inject IReplanerDB replanerdb;
 @inject NavigationManager Navigation;
 
-<h3>EditPerson</h3>
+@if (personguid != null)
+{
+    <h3>Person bearbeiten</h3>
+}
+else {
+    <h3>Person hinzufügen</h3>
+}
+
 
 <EditForm class="pKreis" Model="personModel" OnValidSubmit="SavePerson">
     <div class="form-group text-light">
