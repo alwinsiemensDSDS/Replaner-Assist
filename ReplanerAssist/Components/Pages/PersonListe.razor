@@ -18,7 +18,7 @@ else
     @foreach (var person in replanerdb.Personen)
     {
         <h6 class="text-light">
-            @person.Vorname @person.Nachname (x Tage her) <button @onclick="() => editPerson(person)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
+            @person.Vorname @person.Nachname<button @onclick="() => editPerson(person)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
         </h6>
     }
 }
