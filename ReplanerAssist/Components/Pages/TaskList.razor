@@ -4,8 +4,8 @@
 @inject IReplanerDB replanerdb;
 @inject NavigationManager Navigation
 
-<div class="row">
-    <h5><p class="text-light">Aufgabenliste</p></h5>
+<div class="row text-light">
+    <strong><h4><p class="text-light py-2">Aufgabenliste</p></h4></strong>
 </div>
 @if (replanerdb.Aufgaben.Count == 0)
 {
@@ -15,48 +15,71 @@ else
 {
     @foreach (var aufgabe in replanerdb.Aufgaben)
     {
-        <div class="form-check text-light">
-            <input class="form-check-input" @onchange="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)"><button @onclick="() => editAufgabe(aufgabe)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
-            <label class="form-check-label" for="flexRadioDefault1">
-                @aufgabe.Titel
-            </label>
-            <p class="text-light p-2">@aufgabe.Beschreibung</p>
+        <div class="container-fluid overflow-auto">
+            <div class="row">
+                <div class="col d-flex justify-content-start form-check text-light">
+                    <input class="form-check-input" @onclick="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="@aufgabe.WID" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)">
+                    <label class="form-check-label" for="@aufgabe.WID">
+                        @aufgabe.Titel
+                    </label>
+                </div>
+                <div class="col d-flex justify-content-end ">
+                <button @onclick="() => editAufgabe(aufgabe)" class="btn-small fs-6">
+                    <span class="bi-pencil" />
+                </button>
+                </div>
+            </div>
+            <div class="row">
+                <p class="text-light p-2">@aufgabe.Beschreibung</p>
+            </div>
         </div>
     }
 }
 
+<style>
+    .btn-small {
+        background-color: transparent;
+        color: white;
+        border-color: transparent;
+        box-shadow: none;
+        text-decoration: none;
+        font-size: 7px;
+        padding-left: 40px;
+    }
+</style>
+
 
 
 <div>
-       <nav class="navbar fixed-bottom nav_bar container-fluid">
-      <div class="row w-100 m-0 gx-0">
-        <div class="col d-flex justify-content-start"><NavLink href="/"><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
+    <nav class="navbar fixed-bottom nav_bar container-fluid">
+        <div class="row w-100 m-0 gx-0">
+            <div class="col d-flex justify-content-start"><NavLink href="/"><button class="btn-primary fs-1 px-4"><span class="bi bi-arrow-left"></span></button></NavLink></div>
             <div class="col d-flex justify-content-center"><button @onclick="AddAufgabe" class="btn-primary fs-1 px-4"><span class="bi-plus-circle-fill"></span></button></div>
-        <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4" ><span class=""></span></button></NavLink></div>
-      </div> 
+            <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4"><span class=""></span></button></NavLink></div>
+        </div>
     </nav>
 </div>
 
 <style>
     .navbar {
-    background-color: #222222;
-}
-.btn-primary{
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    text-decoration: none;
-}
+        background-color: #222222;
+    }
 
-.btn-primary:focus,
-    .btn-primary:hover {
+    .btn-primary {
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
         text-decoration: none;
-        outline: none !important;
-
     }
+
+        .btn-primary:focus,
+        .btn-primary:hover {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+            text-decoration: none;
+            outline: none !important;
+        }
 
 </style>
 
@@ -69,24 +92,7 @@ else
         Navigation.NavigateTo("/");
     }
 
-    public async Task AddAufgabe()
-    {
-        Entity.WiederkehrendeAufgabe aufgabe = new Entity.WiederkehrendeAufgabe();
-        aufgabe.Titel = "Testaufgabe";
-        aufgabe.Beschreibung = "Test";
+    public void AddAufgabe() => Navigation.NavigateTo("/edit-aufgabe");
 
-        replanerdb.Aufgaben.Add(aufgabe);
-        if (replanerdb.selectedAufgabe == null)
-        {
-            replanerdb.selectedAufgabe = aufgabe;
-        }
-
-        await replanerdb.SaveDatabase();
-
-    }
-
-    public void editAufgabe(WiederkehrendeAufgabe aufgabe)
-    {
-        
-    }
+    public void editAufgabe(WiederkehrendeAufgabe aufgabe) => Navigation.NavigateTo("/edit-aufgabe/" + aufgabe.WID);
 }

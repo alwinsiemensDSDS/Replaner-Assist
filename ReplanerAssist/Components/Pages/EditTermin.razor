@@ -1,0 +1,158 @@
+﻿@page "/edit-termin"
+@page "/edit-termin/{terminTid}"
+@using Entity
+@using ReplanerAssist.Database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
+
+@if (terminTid != null)
+{
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Termin bearbeiten</p></h4></strong>
+    </div>
+}
+else
+{
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Termin hinzufügen</p></h4></strong>
+    </div>
+}
+
+
+<EditForm class="pKreis" Model="terminModel" OnValidSubmit="saveTermin">
+    <div class="form-group text-light">
+        <label for="inputDate">Datum</label>
+        <input
+            type="date"
+            @bind-value="selectedDate"
+            class="form-control"
+            id="inputDate"
+            aria-describedby="nameHelp"
+            placeholder="Datum auswählen..." />
+    </div>
+
+    <div class="container pKreis">
+        <div class="row ">
+            <h5>
+                Wähle Personen aus:
+            </h5>
+        </div>
+        @foreach (var person in replanerdb.Personen)
+        {
+            <div class="form-check text-light">
+                <input type="radio"
+                       class="form-check-input"
+                       @onclick="() => addRemovePerson(person)"
+                       id="@person.PID"
+                       checked="@(terminModel.PersonenListe.Contains(person))" />
+                <label class ="form-check-label" for="@person.PID">
+                    @person.Vorname @person.Nachname @dayDifferenceDict[person.PID]
+                </label>
+            </div>
+        }
+    </div>
+
+    <div>
+        <button class="btn btn-success" type="submit">Submit</button>
+    </div>
+</EditForm>
+
+@if (terminTid != null)
+{
+    <button @onclick="deleteTermin" type="button py-2" class="btn btn-warning">Termin Löschen</button>
+}
+
+<style>
+    .pKreis {
+        margin-top: 20px;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string? terminTid { get; set; }
+
+    DateTime selectedDate
+    {
+        get => terminModel.Datum;
+        set
+        {
+            terminModel.Datum = value;
+            updateTimeDiff();
+        }
+    }
+    Dictionary<string, string> dayDifferenceDict;
+
+    Termin terminModel;
+
+    protected override void OnInitialized()
+    {
+        WiederkehrendeAufgabe aufgabe = replanerdb.selectedAufgabe!;
+        terminModel = replanerdb.Termine.Find(termin => termin.TID == terminTid) ?? new Termin(){WID=aufgabe.WID, Aufgabe=aufgabe, Datum=DateTime.Now};
+        selectedDate = terminModel.Datum;
+    }
+
+    public void updateTimeDiff()
+    {
+        dayDifferenceDict = new Dictionary<string, string>();
+        List<Termin> termineForAufgabe = replanerdb.GetTermineForAufgabe(replanerdb.selectedAufgabe);
+
+        foreach (Person person in replanerdb.Personen)
+        {
+            List<Termin> beforeSelected = termineForAufgabe.FindAll(
+                termin =>
+                    termin.TID != terminTid &&
+                    termin.PersonenIDs.Contains(person.PID) &&
+                    termin.Datum <= selectedDate
+            );
+
+            if (beforeSelected.Count > 0)
+            {
+                Termin latest = beforeSelected.OrderByDescending(termin => termin.Datum).ToList()[0];
+                dayDifferenceDict.Add(person.PID, "(zuletzt vor " + (selectedDate - latest.Datum).Days + " Tagen)");
+            }
+            else
+            {
+                dayDifferenceDict.Add(person.PID, "(vorher noch nicht eingeplant gewesen)");
+            }
+        }
+    }
+
+    public void addRemovePerson(Person person)
+    {
+        if (!terminModel.PersonenListe.Remove(person))
+        {
+            terminModel.PersonenListe.Add(person);
+            terminModel.PersonenIDs.Add(person.PID);
+        }
+        else
+        {
+            terminModel.PersonenIDs.Remove(person.PID);
+        }
+    }
+
+    public async Task saveTermin()
+    {
+        if (terminTid != null)
+        {
+            int index = replanerdb.Termine.FindIndex(termin => termin.TID == terminTid);
+            replanerdb.Termine[index] = terminModel;
+        }
+        else
+        {
+            replanerdb.Termine.Add(terminModel);
+        }
+
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/");
+    }
+
+    public async Task deleteTermin()
+    {
+        int index = replanerdb.Termine.FindIndex(termin => termin.TID == terminTid);
+        replanerdb.Termine.RemoveAt(index);
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/");
+    }
+
+}
