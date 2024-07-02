@@ -71,8 +71,21 @@ namespace ReplanerAssist.Database
                 {
                     selectedAufgabe = Aufgaben.FirstOrDefault();
                 }
+                // Add Person-Objects to selectedAufgabe
+                foreach (var person_id in selectedAufgabe.PersonenIDs)
+                {
+                    Person person = Personen.FirstOrDefault(person => person.PID == person_id);
+                    if (person != null)
+                    {
+                        selectedAufgabe.PersonenListe.Add(person);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Person with id " + person_id + " not found in db");
+                    }
+                }
 
-                // Add Person-Objects to Aufgabe
+                // Add Person-Objects to Aufgaben
                 foreach (var aufgabe in Aufgaben)
                 {
                     if (aufgabe.PersonenIDs.Count > 0)
