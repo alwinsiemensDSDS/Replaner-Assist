@@ -30,13 +30,13 @@ else
             placeholder="Datum auswählen..." />
     </div>
 
-    <div class="container pKreis">
+    <div class="pKreis">
         <div class="row ">
             <h5>
                 Wähle Personen aus:
             </h5>
         </div>
-        @foreach (var person in replanerdb.Personen)
+        @foreach (var person in selectedAufgabe.PersonenListe)
         {
             <div class="form-check text-light">
                 <input type="radio"
@@ -76,21 +76,22 @@ else
     }
     Dictionary<string, string> dayDifferenceDict;
 
+    WiederkehrendeAufgabe selectedAufgabe;
     Termin terminModel;
 
     protected override void OnInitialized()
     {
-        WiederkehrendeAufgabe aufgabe = replanerdb.selectedAufgabe!;
-        terminModel = replanerdb.Termine.Find(termin => termin.TID == terminTid) ?? new Termin(){WID=aufgabe.WID, Aufgabe=aufgabe, Datum=DateTime.Now};
+        selectedAufgabe = replanerdb.selectedAufgabe!;
+        terminModel = replanerdb.Termine.Find(termin => termin.TID == terminTid) ?? new Termin() {WID = selectedAufgabe.WID, Aufgabe = selectedAufgabe, Datum = DateTime.Now.Date};
         selectedDate = terminModel.Datum;
     }
 
     public void updateTimeDiff()
     {
         dayDifferenceDict = new Dictionary<string, string>();
-        List<Termin> termineForAufgabe = replanerdb.GetTermineForAufgabe(replanerdb.selectedAufgabe);
+        List<Termin> termineForAufgabe = replanerdb.GetTermineForAufgabe(selectedAufgabe);
 
-        foreach (Person person in replanerdb.Personen)
+        foreach (Person person in selectedAufgabe.PersonenListe)
         {
             List<Termin> beforeSelected = termineForAufgabe.FindAll(
                 termin =>
@@ -113,14 +114,14 @@ else
 
     public void addRemovePerson(Person person)
     {
-        if (!terminModel.PersonenListe.Remove(person))
+        if (terminModel.PersonenListe.Remove(person))
         {
-            terminModel.PersonenListe.Add(person);
-            terminModel.PersonenIDs.Add(person.PID);
+            terminModel.PersonenIDs.Remove(person.PID);
         }
         else
         {
-            terminModel.PersonenIDs.Remove(person.PID);
+            terminModel.PersonenListe.Add(person);
+            terminModel.PersonenIDs.Add(person.PID);
         }
     }
 
