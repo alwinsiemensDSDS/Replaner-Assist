@@ -1,0 +1,92 @@
+﻿@page "/edit-person"
+@page "/edit-person/{personguid}"
+@using Entity
+@using ReplanerAssist.Database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
+
+@if (personguid != null)
+{
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Person bearbeiten</p></h4></strong>
+    </div>
+}
+else
+{
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Person hinzufügen</p></h4></strong>
+    </div>
+}
+
+<EditForm class="pKreis" Model="personModel" OnValidSubmit="SavePerson">
+    <div class="form-group text-light">
+        <label class="form-label" for="inputName">Vorname</label>
+        <input 
+            type="text"
+            @bind-value="personModel.Vorname"
+            class="form-control"
+            id="aufgabeName"
+            aria-describedby="nameHelp"
+            placeholder="Hier den Vornamen eingeben...">
+
+        <label class="form-label" for="inputName">Nachname</label>
+        <input type="text"
+            @bind-value="personModel.Nachname"
+            class="form-control" id="aufgabeName"
+            aria-describedby="nameHelp"
+            placeholder="Hier den Nachnamen eingeben...">
+
+        <label class="form-label" for="aufgabeBeschreibung">Notiz</label>
+        <InputTextArea
+            class="form-control"
+            @bind-Value="personModel.Notiz"
+            id="aufgabeBeschreibung"
+            placeholder ="..."
+            rows="3" />
+    </div>
+
+    <div>
+        <button class="btn btn-success" type="submit">Submit</button>
+    </div>
+</EditForm>
+
+@if (personguid != null)
+{
+    <button @onclick="DeletePerson" type="button py-2" class="btn btn-warning">Person Löschen</button>
+}
+
+@code {
+    [Parameter]
+    public string? personguid { get; set; }
+
+    Person personModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        personModel = replanerdb.Personen.Find(person => person.PID == personguid) ?? new Entity.Person();
+    }
+
+    public async Task SavePerson()
+    {
+        if (personguid != null)
+        {
+            int index = replanerdb.Personen.FindIndex(person => person.PID == personguid);
+            replanerdb.Personen[index] = personModel;
+        }
+        else
+        {
+            replanerdb.Personen.Add(personModel);
+        }
+
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/person-list");
+    }
+
+    public async Task DeletePerson()
+    {
+        int index = replanerdb.Personen.FindIndex(person => person.PID == personguid);
+        replanerdb.Personen.RemoveAt(index);
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/person-list");
+    }
+}

@@ -1,0 +1,45 @@
+﻿@page "/person-list"
+@using ReplanerAssist.Database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
+
+
+<div class="row text-light">
+    <strong><h4><p class="text-light py-2">Personenliste</p></h4></strong>
+</div>
+@if (replanerdb.Personen.Count == 0)
+{
+   <p>Es sind keine Personen angelegt</p>
+}
+else
+{
+    <div class="container-fluid overflow-auto">
+        @foreach (var person in replanerdb.Personen)
+        {
+            <div class="row">
+                <h6 class="col-pers-task d-flex justify-content-start text-light">
+                    @person.Vorname @person.Nachname
+                </h6>
+                <button @onclick="() => editPerson(person)" class="col d-flex justify-content-end btn-small fs-6">
+                    <span class="bi-pencil"/>
+                </button>
+            </div>
+        }
+    </div>
+}
+
+<div>
+    <nav class="navbar fixed-bottom nav_bar container-fluid">
+      <div class="row w-100 m-0 gx-0">
+        <div class="col d-flex justify-content-start"><NavLink href=""><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
+        <div class="col d-flex justify-content-center"><button @onclick="AddPerson" class="btn-primary fs-1 px-4" ><span class="bi-plus-circle-fill"></span></button></div>
+        <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4" ><span class=""></span></button></NavLink></div>
+      </div> 
+    </nav>
+</div>
+
+@code{
+    public async Task AddPerson() => Navigation.NavigateTo("/edit-person");
+
+    public async Task editPerson(Entity.Person person) => Navigation.NavigateTo("/edit-person/" + person.PID);
+}

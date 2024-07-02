@@ -1,5 +1,145 @@
 ﻿@page "/"
+@using ReplanerAssist.Database
+@using ReplanerAssist.Entity
+@using ReplanerAssist.database
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation;
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+@if(loaded == false)
+{
+   
+    @if (error)
+    {
+        <p>Error: Etwas stimmt mit den Daten so garnicht.</p>
+    }
+    else
+    {
+        if (empty)
+        {
+            <p>Nichts da - fühl dich frei und füge was hinzu!</p>
+        }
+        else
+        {
+            <p>Daten werden gerade geladen</p>
+        }
+    }
+}
+else
+{  
+    if (no_aufgaben)
+    {
+        <p>Erstelle deine erste Aufgabe (unten links)!</p>
+    }else
+    {
+        <div class="row text-light">
+            <strong><h4><p class="text-light py-2">Planung für '@replanerdb.selectedAufgabe?.Titel'</p></h4></strong>
+        </div>
+        if (aufgabe_no_termine)
+        {
+            
+            <p>Erstelle deinen ersten Termin!</p>
+        }
+        else
+        {
+            <div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
+                @foreach (Termin termin in Terminliste!.OrderByDescending(termin => termin.Datum))
+                {
+                    <div class="row text-light m-0">
+                        <div class="row">
+                            <div class="col d-flex justify-content-start">
+                                <span>@termin.Datum.ToShortDateString() </span>
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                <button @onclick="() => editTermin(termin)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
+                            </div>
+                        </div>
+                        <div class="row ms-1">
+                            <ul style="list-style-type:disc">
+                                @if (termin.PersonenListe.Count != 0)
+                                {
+                                    @foreach (var person in termin.PersonenListe)
+                                    {
+                                        <li>@person.Vorname @person.Nachname</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>Noch keine Personen</li>
+                                }
+                            </ul>
+                        </div>
+
+                        <hr />
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+<div>
+    <nav class="navbar fixed-bottom nav_bar container-fluid">
+        <div class="row w-100 m-0 gx-0">
+            <div class="col d-flex justify-content-start"><NavLink href="task-list"><button class="btn-primary fs-1 px-4"><span class="bi-list-ul"></span></button></NavLink></div>
+            @if (replanerdb.Aufgaben.Count != 0 && replanerdb.Personen.Count != 0)
+            {
+                <div class="col d-flex justify-content-center"><button @onclick="addTermin" class="btn-primary fs-1 px-4"><span class="bi-plus-circle-fill"></span></button></div>
+            }
+            <div class="col d-flex justify-content-end"><NavLink href="person-list"><button class="btn-primary fs-1 px-4"><span class="bi-person-square"></span></button></NavLink></div>
+        </div>
+    </nav>
+</div>
+
+@code {
+
+    public bool loaded;
+    public bool error;
+    public bool empty;
+    public bool aufgabe_no_termine;
+    public bool no_aufgaben;
+    List<Termin>? Terminliste;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Terminliste = new List<Termin>();
+
+        await LoadDataFromDb();      
+
+    }
+    private async Task LoadDataFromDb()
+    {
+
+        var result = await replanerdb.LoadDatabase();
+        if (result == DbReturnType.SuccessFull)
+        {
+            if (replanerdb.selectedAufgabe != null)
+            {
+                Terminliste = replanerdb.GetTermineForAufgabe(replanerdb.selectedAufgabe);
+                if (Terminliste.Count == 0)
+                {
+                    aufgabe_no_termine = true;
+                }
+            }
+            if (replanerdb.selectedAufgabe == null)
+            {
+                no_aufgaben = true;
+            }
+
+            loaded = true;
+        }
+        if (result == DbReturnType.Error)
+        {
+            error = true;
+        }
+        if (result == DbReturnType.Empty)
+        {
+            empty = true;
+
+        }
+
+    }
+
+    public void addTermin() => Navigation.NavigateTo("/edit-termin");
+
+    public void editTermin(Termin termin) => Navigation.NavigateTo("/edit-termin/" + termin.TID);
+}

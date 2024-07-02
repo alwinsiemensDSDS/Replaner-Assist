@@ -1,0 +1,61 @@
+﻿@page "/task-list"
+@using ReplanerAssist.Database
+@using ReplanerAssist.Entity
+@inject IReplanerDB replanerdb;
+@inject NavigationManager Navigation
+
+<div class="row text-light">
+    <strong><h4><p class="text-light py-2">Aufgabenliste</p></h4></strong>
+</div>
+@if (replanerdb.Aufgaben.Count == 0)
+{
+    <p>Es sind keine Augabe angelegt</p>
+}
+else
+{
+    @foreach (var aufgabe in replanerdb.Aufgaben)
+    {
+        <div class="container-fluid overflow-auto">
+            <div class="row">
+                <div class="col-pers-task d-flex justify-content-start form-check text-light">
+                    <input class="form-check-input" @onclick="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="@aufgabe.WID" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)" style="flex-shrink: 0">
+                    <label class="form-check-label" for="@aufgabe.WID">
+                        @aufgabe.Titel
+                    </label>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <button @onclick="() => editAufgabe(aufgabe)" class="btn-small fs-6">
+                        <span class="bi-pencil" />
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <p class="text-light p-2">@aufgabe.Beschreibung</p>
+            </div>
+        </div>
+    }
+}
+
+<div>
+    <nav class="navbar fixed-bottom nav_bar container-fluid">
+        <div class="row w-100 m-0 gx-0">
+            <div class="col d-flex justify-content-start"><NavLink href="/"><button class="btn-primary fs-1 px-4"><span class="bi bi-arrow-left"></span></button></NavLink></div>
+            <div class="col d-flex justify-content-center"><button @onclick="AddAufgabe" class="btn-primary fs-1 px-4"><span class="bi-plus-circle-fill"></span></button></div>
+            <div class="col d-flex justify-content-center"><NavLink><button class="btn-primary fs-1 px-4"><span class=""></span></button></NavLink></div>
+        </div>
+    </nav>
+</div>
+
+@code {
+
+    public async Task SwitchAufgabe(WiederkehrendeAufgabe aufgabe)
+    {
+        replanerdb.selectedAufgabe = aufgabe;
+        await replanerdb.SaveDatabase();
+        Navigation.NavigateTo("/");
+    }
+
+    public void AddAufgabe() => Navigation.NavigateTo("/edit-aufgabe");
+
+    public void editAufgabe(WiederkehrendeAufgabe aufgabe) => Navigation.NavigateTo("/edit-aufgabe/" + aufgabe.WID);
+}
