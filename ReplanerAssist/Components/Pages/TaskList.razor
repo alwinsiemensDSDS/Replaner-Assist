@@ -17,8 +17,8 @@ else
     {
         <div class="container-fluid overflow-auto">
             <div class="row">
-                <div class="col d-flex justify-content-start form-check text-light">
-                    <input class="form-check-input" @onclick="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="@aufgabe.WID" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)">
+                <div class="col-pers-task d-flex justify-content-start form-check text-light">
+                    <input class="form-check-input" @onclick="() => SwitchAufgabe(aufgabe)" type="radio" name="flexRadioDefault" id="@aufgabe.WID" checked="@(replanerdb.selectedAufgabe?.WID == aufgabe.WID)" style="flex-shrink: 0">
                     <label class="form-check-label" for="@aufgabe.WID">
                         @aufgabe.Titel
                     </label>
