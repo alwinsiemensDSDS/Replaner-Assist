@@ -16,13 +16,13 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddMauiBlazorWebView();
-
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
-		builder.Services.AddSingleton<IReplanerDB,ReplanerDB>();
-		builder.Logging.AddDebug();
+		//builder.Services.AddBlazorWebViewDeveloperTools();
+		//builder.Logging.AddDebug();
 #endif
+        builder.Services.AddSingleton<IReplanerDB,ReplanerDB>();
+        
 
-		return builder.Build();
+        return builder.Build();
 	}
 }
