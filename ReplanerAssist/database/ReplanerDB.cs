@@ -1,6 +1,7 @@
 using Microsoft.Maui.Storage;
 using ReplanerAssist.database;
 using ReplanerAssist.Entity;
+using System.Linq;
 
 namespace ReplanerAssist.Database
 {
@@ -64,10 +65,31 @@ namespace ReplanerAssist.Database
 
             if (Aufgaben.Count != 0)
             {
+                // select Aufgabe
                 selectedAufgabe = loaded_db.selectedAufgabe;
                 if (loaded_db.selectedAufgabe == null)
                 {
                     selectedAufgabe = Aufgaben.FirstOrDefault();
+                }
+
+                // Add Person-Objects to Aufgabe
+                foreach (var aufgabe in Aufgaben)
+                {
+                    if (aufgabe.PersonenIDs.Count > 0)
+                    {
+                        foreach (var person_id in aufgabe.PersonenIDs)
+                        {
+                            Person person = Personen.FirstOrDefault(person => person.PID == person_id);
+                            if (person != null)
+                            {
+                                aufgabe.PersonenListe.Add(person);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Person with id " + person_id + " not found in db");
+                            }
+                        }
+                    }
                 }
             }
             else
