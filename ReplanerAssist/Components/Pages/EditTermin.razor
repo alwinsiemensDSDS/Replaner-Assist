@@ -30,7 +30,10 @@ else
             placeholder="Datum auswählen..." />
     </div>
 
+    
     <div class="pKreis">
+    @if (selectedAufgabe.PersonenListe.Count > 0)
+    {
         <div class="row ">
             <h5>
                 Wähle Personen aus:
@@ -40,16 +43,26 @@ else
         {
             <div class="form-check text-light">
                 <input type="radio"
-                       class="form-check-input"
-                       @onclick="() => addRemovePerson(person)"
-                       id="@person.PID"
-                       checked="@(terminModel.PersonenListe.Contains(person))" />
+                        class="form-check-input"
+                        @onclick="() => addRemovePerson(person)"
+                        id="@person.PID"
+                        checked="@(terminModel.PersonenListe.Contains(person))" />
                 <label class ="form-check-label" for="@person.PID">
                     @person.Vorname @person.Nachname @dayDifferenceDict[person.PID]
                 </label>
             </div>
+            }
+        }
+        else
+        {
+            <div class="row ">
+                <h5>
+                    In der Aufgabe kannst du einen Personenkreis auswählen!
+                </h5>
+            </div>
         }
     </div>
+    
 
     <div>
         <button class="btn btn-success" type="submit">Submit</button>
