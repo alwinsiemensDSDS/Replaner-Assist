@@ -18,10 +18,9 @@ else
     </div>
 }
 
-
 <EditForm class="pKreis" Model="terminModel" OnValidSubmit="saveTermin">
     <div class="form-group text-light">
-        <label for="inputDate">Datum</label>
+        <label class="form-label" for="inputDate">Datum</label>
         <input
             type="date"
             @bind-value="selectedDate"
@@ -61,12 +60,6 @@ else
 {
     <button @onclick="deleteTermin" type="button py-2" class="btn btn-warning">Termin Löschen</button>
 }
-
-<style>
-    .pKreis {
-        margin-top: 20px;
-    }
-</style>
 
 @code {
     [Parameter]

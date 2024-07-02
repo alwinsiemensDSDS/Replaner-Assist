@@ -7,16 +7,20 @@
 
 @if (personguid != null)
 {
-    <h3>Person bearbeiten</h3>
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Person bearbeiten</p></h4></strong>
+    </div>
 }
-else {
-    <h3>Person hinzufügen</h3>
+else
+{
+    <div class="row text-light">
+        <strong><h4><p class="text-light py-2">Person hinzufügen</p></h4></strong>
+    </div>
 }
-
 
 <EditForm class="pKreis" Model="personModel" OnValidSubmit="SavePerson">
     <div class="form-group text-light">
-        <label for="inputName">Vorname</label>
+        <label class="form-label" for="inputName">Vorname</label>
         <input 
             type="text"
             @bind-value="personModel.Vorname"
@@ -25,14 +29,14 @@ else {
             aria-describedby="nameHelp"
             placeholder="Hier den Vornamen eingeben...">
 
-        <label for="inputName">Nachname</label>
+        <label class="form-label" for="inputName">Nachname</label>
         <input type="text"
             @bind-value="personModel.Nachname"
             class="form-control" id="aufgabeName"
             aria-describedby="nameHelp"
             placeholder="Hier den Nachnamen eingeben...">
 
-        <label for="aufgabeBeschreibung">Notiz</label>
+        <label class="form-label" for="aufgabeBeschreibung">Notiz</label>
         <InputTextArea
             class="form-control"
             @bind-Value="personModel.Notiz"
@@ -50,22 +54,6 @@ else {
 {
     <button @onclick="DeletePerson" type="button py-2" class="btn btn-warning">Person Löschen</button>
 }
-
-<style>
-    .pKreis {
-        background-color: #222222;
-        margin-top: 20px;
-    }
-
-
-    hr {
-        border: 3px;
-        border-top: 2px solid rgb(255, 255, 255);
-        margin: 0 auto !important;
-        opacity: 80;
-    }
-
-</style>
 
 @code {
     [Parameter]

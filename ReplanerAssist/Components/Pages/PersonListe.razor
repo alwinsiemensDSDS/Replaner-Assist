@@ -4,10 +4,8 @@
 @inject NavigationManager Navigation;
 
 
-<div class="row">
-    <h5 class="text-light">
-        Personenliste
-    </h5>
+<div class="row text-light">
+    <strong><h4><p class="text-light py-2">Personenliste</p></h4></strong>
 </div>
 @if (replanerdb.Personen.Count == 0)
 {
@@ -15,30 +13,23 @@
 }
 else
 {
-    @foreach (var person in replanerdb.Personen)
-    {
-        <h6 class="text-light">
-            @person.Vorname @person.Nachname<button @onclick="() => editPerson(person)" class="btn-small fs-6"><span class="bi-pencil"></span></button>
-        </h6>
-    }
+    <div class="container-fluid overflow-auto">
+        @foreach (var person in replanerdb.Personen)
+        {
+            <div class="row">
+                <h6 class="col d-inline-flex justify-content-start text-light">
+                    @person.Vorname @person.Nachname
+                </h6>
+                <button @onclick="() => editPerson(person)" class="col d-inline-flex justify-content-end btn-small fs-6">
+                    <span class="bi-pencil"/>
+                </button>
+            </div>
+        }
+    </div>
 }
 
-<style>
-    .btn-small {
-        background-color: transparent;
-        color: white;
-        border-color: transparent;
-        box-shadow: none;
-        text-decoration: none;
-        font-size: 7px;
-        padding-left: 40px;
-    }
-</style>
-
-
-
 <div>
-       <nav class="navbar fixed-bottom nav_bar container-fluid">
+    <nav class="navbar fixed-bottom nav_bar container-fluid">
       <div class="row w-100 m-0 gx-0">
         <div class="col d-flex justify-content-start"><NavLink href=""><button class="btn-primary fs-1 px-4" ><span class="bi bi-arrow-left"></span></button></NavLink></div>
         <div class="col d-flex justify-content-center"><button @onclick="AddPerson" class="btn-primary fs-1 px-4" ><span class="bi-plus-circle-fill"></span></button></div>
@@ -46,29 +37,6 @@ else
       </div> 
     </nav>
 </div>
-
-<style>
-    .navbar {
-    background-color: #222222;
-}
-.btn-primary{
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    text-decoration: none;
-}
-
-.btn-primary:focus,
-    .btn-primary:hover {
-        background-color: transparent;
-        border-color: transparent;
-        box-shadow: none;
-        text-decoration: none;
-        outline: none !important;
-
-    }
-
-</style>
 
 @code{
     public async Task AddPerson() => Navigation.NavigateTo("/edit-person");
