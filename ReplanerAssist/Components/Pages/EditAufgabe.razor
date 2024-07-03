@@ -120,6 +120,10 @@ else
         }
         int index = replanerdb.Aufgaben.FindIndex(aufgabe => aufgabe.WID == aufgabewid);
         replanerdb.Aufgaben.RemoveAt(index);
+        if (replanerdb.selectedAufgabe != null && replanerdb.selectedAufgabe.WID == aufgabeModel.WID)
+        {
+            replanerdb.selectedAufgabe = replanerdb.Aufgaben.FirstOrDefault();
+        }
         await replanerdb.SaveDatabase();
         Navigation.NavigateTo("/task-list");
     }
