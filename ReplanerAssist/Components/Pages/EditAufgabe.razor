@@ -42,22 +42,29 @@ else
                 Wähle den Personenkreis aus:
             </h5>
         </div>
-        <div class="container-fluid overflow-auto" style="height: calc(100vh - 550px)">
-        @foreach (var person in replanerdb.Personen)
+        @if (replanerdb.Personen.Count == 0)
         {
-            <div class="form-check text-light">
-                <input
-                    type="radio"
-                    class="form-check-input"
-                    @onclick="() => addRemovePerson(person)"
-                    id="@person.PID"
-                    checked="@(aufgabeModel.PersonenListe.Contains(person))" />
-                <label class="form-check-label" for="@person.PID">
-                    @person.Vorname @person.Nachname
-                </label>
+            <p>Es sind noch keine Personen angelegt.</p>
+        }
+        else
+        {
+            <div class="container-fluid overflow-auto" style="max-height: calc(100vh - 550px)">
+                @foreach (var person in replanerdb.Personen)
+                {
+                    <div class="form-check text-light">
+                        <input type="radio"
+                               class="form-check-input"
+                               @onclick="() => addRemovePerson(person)"
+                               id="@person.PID"
+                               checked="@(aufgabeModel.PersonenListe.Contains(person))" />
+                        <label class="form-check-label" for="@person.PID">
+                            @person.Vorname @person.Nachname
+                        </label>
+                    </div>
+                }
             </div>
         }
-        </div>
+       
     </div>
 
     <div>
