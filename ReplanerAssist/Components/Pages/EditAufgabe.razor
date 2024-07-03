@@ -42,6 +42,7 @@ else
                 Wähle den Personenkreis aus:
             </h5>
         </div>
+        <div class="container-fluid overflow-auto" style="height: calc(100vh - 550px)">
         @foreach (var person in replanerdb.Personen)
         {
             <div class="form-check text-light">
@@ -56,6 +57,7 @@ else
                 </label>
             </div>
         }
+        </div>
     </div>
 
     <div>

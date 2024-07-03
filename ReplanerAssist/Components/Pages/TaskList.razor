@@ -13,6 +13,7 @@
 }
 else
 {
+    <div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
     @foreach (var aufgabe in replanerdb.Aufgaben)
     {
         <div class="container-fluid overflow-auto">
@@ -34,6 +35,7 @@ else
             </div>
         </div>
     }
+    </div>
 }
 
 <div>

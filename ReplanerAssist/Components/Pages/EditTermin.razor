@@ -21,37 +21,38 @@ else
 <EditForm class="pKreis" Model="terminModel" OnValidSubmit="saveTermin">
     <div class="form-group text-light">
         <label class="form-label" for="inputDate">Datum</label>
-        <input
-            type="date"
-            @bind-value="selectedDate"
-            class="form-control"
-            id="inputDate"
-            aria-describedby="nameHelp"
-            placeholder="Datum auswählen..." />
+        <input type="date"
+               @bind-value="selectedDate"
+               class="form-control"
+               id="inputDate"
+               aria-describedby="nameHelp"
+               placeholder="Datum auswählen..." />
     </div>
 
-    
+
     <div class="pKreis">
-    @if (selectedAufgabe.PersonenListe.Count > 0)
-    {
-        <div class="row ">
-            <h5>
-                Wähle Personen aus:
-            </h5>
-        </div>
-        @foreach (var person in selectedAufgabe.PersonenListe)
+        @if (selectedAufgabe.PersonenListe.Count > 0)
         {
-            <div class="form-check text-light">
-                <input type="radio"
-                        class="form-check-input"
-                        @onclick="() => addRemovePerson(person)"
-                        id="@person.PID"
-                        checked="@(terminModel.PersonenListe.Contains(person))" />
-                <label class ="form-check-label" for="@person.PID">
-                    @person.Vorname @person.Nachname @dayDifferenceDict[person.PID]
-                </label>
+            <div class="row ">
+                <h5>
+                    Wähle Personen aus:
+                </h5>
             </div>
+            <div class="container-fluid overflow-auto" style="height: calc(100vh - 550px)">
+            @foreach (var person in selectedAufgabe.PersonenListe)
+            {
+                <div class="form-check text-light">
+                    <input type="radio"
+                           class="form-check-input"
+                           @onclick="() => addRemovePerson(person)"
+                           id="@person.PID"
+                           checked="@(terminModel.PersonenListe.Contains(person))" />
+                    <label class="form-check-label" for="@person.PID">
+                        @person.Vorname @person.Nachname @dayDifferenceDict[person.PID]
+                    </label>
+                </div>
             }
+            </div>
         }
         else
         {
@@ -62,7 +63,7 @@ else
             </div>
         }
     </div>
-    
+
 
     <div>
         <button class="btn btn-success" type="submit">Submit</button>
@@ -95,7 +96,7 @@ else
     protected override void OnInitialized()
     {
         selectedAufgabe = replanerdb.selectedAufgabe!;
-        terminModel = replanerdb.Termine.Find(termin => termin.TID == terminTid) ?? new Termin() {WID = selectedAufgabe.WID, Aufgabe = selectedAufgabe, Datum = DateTime.Now.Date};
+        terminModel = replanerdb.Termine.Find(termin => termin.TID == terminTid) ?? new Termin() { WID = selectedAufgabe.WID, Aufgabe = selectedAufgabe, Datum = DateTime.Now.Date };
         selectedDate = terminModel.Datum;
     }
 
