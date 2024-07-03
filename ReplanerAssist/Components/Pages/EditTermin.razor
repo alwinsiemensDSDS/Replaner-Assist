@@ -4,6 +4,7 @@
 @using ReplanerAssist.Database
 @inject IReplanerDB replanerdb;
 @inject NavigationManager Navigation;
+@inject IJSRuntime JSRuntime;
 
 @if (terminTid != null)
 {
@@ -152,7 +153,7 @@ else
         }
 
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 
     public async Task deleteTermin()
@@ -160,7 +161,7 @@ else
         int index = replanerdb.Termine.FindIndex(termin => termin.TID == terminTid);
         replanerdb.Termine.RemoveAt(index);
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 
 }

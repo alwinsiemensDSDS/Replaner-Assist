@@ -4,6 +4,7 @@
 @using ReplanerAssist.Database
 @inject IReplanerDB replanerdb;
 @inject NavigationManager Navigation;
+@inject IJSRuntime JSRuntime
 
 @if (personguid != null)
 {
@@ -79,7 +80,7 @@ else
         }
 
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/person-list");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 
     public async Task DeletePerson()
@@ -87,6 +88,6 @@ else
         int index = replanerdb.Personen.FindIndex(person => person.PID == personguid);
         replanerdb.Personen.RemoveAt(index);
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/person-list");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 }
