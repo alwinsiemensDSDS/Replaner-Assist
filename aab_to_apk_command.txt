@@ -1,0 +1,1 @@
+C:\Users\alwin\.jdks\openjdk-22.0.1\bin\java.exe -jar bundletool-all-1.17.0.jar build-apks --bundle=fb5.thowl.replanerassist.aab --output=replanerassist.apks --mode=universal --ks=replanerassist.keystore --ks-key-alias=replanerassist --key-pass=pass:vFbLNunrA44WZ9
