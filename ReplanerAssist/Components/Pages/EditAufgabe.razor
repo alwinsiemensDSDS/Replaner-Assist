@@ -3,7 +3,8 @@
 @using Entity
 @using ReplanerAssist.Database
 @inject IReplanerDB replanerdb;
-@inject NavigationManager Navigation;
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime;
 
 @if (aufgabewid != null)
 {
@@ -116,7 +117,7 @@ else
 
         replanerdb.selectedAufgabe = aufgabeModel;
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/task-list");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 
     public async Task DeleteAufgabe()
@@ -132,6 +133,6 @@ else
             replanerdb.selectedAufgabe = replanerdb.Aufgaben.FirstOrDefault();
         }
         await replanerdb.SaveDatabase();
-        Navigation.NavigateTo("/task-list");
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 }
