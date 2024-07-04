@@ -14,7 +14,7 @@
 else
 {
     <div class="container-fluid overflow-auto" style="height: calc(100vh - 200px)">
-    @foreach (var aufgabe in replanerdb.Aufgaben)
+    @foreach (var aufgabe in replanerdb.Aufgaben.OrderBy(a => a.Titel))
     {
         <div class="container-fluid overflow-auto">
             <div class="row">
