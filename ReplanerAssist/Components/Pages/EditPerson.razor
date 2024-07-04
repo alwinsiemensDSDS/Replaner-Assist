@@ -59,6 +59,7 @@ else
 @code {
     [Parameter]
     public string? personguid { get; set; }
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
 
     Person personModel;
 
@@ -85,9 +86,17 @@ else
 
     public async Task DeletePerson()
     {
-        int index = replanerdb.Personen.FindIndex(person => person.PID == personguid);
-        replanerdb.Personen.RemoveAt(index);
-        await replanerdb.SaveDatabase();
-        await JSRuntime.InvokeVoidAsync("history.back");
+        var parameters = new ModalParameters()
+            .Add(nameof(DeleteConfirmation.Message), personModel.Vorname+" "+personModel.Nachname);
+        var modal = Modal.Show<DeleteConfirmation>("Löschen", parameters);
+        var result = await modal.Result;
+        if (result.Confirmed)
+        {
+            int index = replanerdb.Personen.FindIndex(person => person.PID == personguid);
+            replanerdb.Personen.RemoveAt(index);
+            await replanerdb.SaveDatabase();
+            await JSRuntime.InvokeVoidAsync("history.back");
+        }
+        
     }
 }

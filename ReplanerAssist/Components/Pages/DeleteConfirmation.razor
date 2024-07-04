@@ -1,0 +1,21 @@
+﻿<h3>Willst du wirklich <b>@Message</b> löschen?</h3>
+<div class="row">
+    <div class="col d-flex justify-content-start">
+        <button class="btn btn-danger" @onclick=DeleteYes>Ja löschen</button>
+    </div>
+    <div class="col d-flex justify-content-end">
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+    
+    
+</div>
+
+
+@code {
+    [Parameter]
+    public string Message { get; set; } = "";
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private async Task DeleteYes() => await BlazoredModal.CloseAsync(ModalResult.Ok());
+    private async Task Cancel() => await BlazoredModal.CancelAsync();
+}

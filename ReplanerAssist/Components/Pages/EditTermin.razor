@@ -80,6 +80,8 @@ else
     [Parameter]
     public string? terminTid { get; set; }
 
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
     DateTime selectedDate
     {
         get => terminModel.Datum;
@@ -158,10 +160,19 @@ else
 
     public async Task deleteTermin()
     {
-        int index = replanerdb.Termine.FindIndex(termin => termin.TID == terminTid);
-        replanerdb.Termine.RemoveAt(index);
-        await replanerdb.SaveDatabase();
-        await JSRuntime.InvokeVoidAsync("history.back");
+        var parameters = new ModalParameters().Add(
+            nameof(DeleteConfirmation.Message),
+            terminModel.Aufgabe.Titel + " am " +  terminModel.Datum.ToShortDateString()
+        );
+        var modal = Modal.Show<DeleteConfirmation>("Löschen", parameters);
+        var result = await modal.Result;
+        if (result.Confirmed)
+        {
+            int index = replanerdb.Termine.FindIndex(termin => termin.TID == terminTid);
+            replanerdb.Termine.RemoveAt(index);
+            await replanerdb.SaveDatabase();
+            await JSRuntime.InvokeVoidAsync("history.back");
+        }
     }
 
 }

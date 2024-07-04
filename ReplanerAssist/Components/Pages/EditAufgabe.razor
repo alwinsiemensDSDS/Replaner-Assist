@@ -82,6 +82,8 @@ else
     [Parameter]
     public string? aufgabewid { get; set; }
 
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
     WiederkehrendeAufgabe aufgabeModel;
 
     protected override async Task OnInitializedAsync()
@@ -122,17 +124,24 @@ else
 
     public async Task DeleteAufgabe()
     {
-        foreach (Termin termin in replanerdb.Termine.FindAll(t => t.WID == aufgabewid))
+        var parameters = new ModalParameters()
+            .Add(nameof(DeleteConfirmation.Message), aufgabeModel.Titel);
+        var modal = Modal.Show<DeleteConfirmation>("Löschen", parameters);
+        var result = await modal.Result;
+        if (result.Confirmed)
         {
-            replanerdb.Termine.Remove(termin);
+            foreach (Termin termin in replanerdb.Termine.FindAll(t => t.WID == aufgabewid))
+            {
+                replanerdb.Termine.Remove(termin);
+            }
+            int index = replanerdb.Aufgaben.FindIndex(aufgabe => aufgabe.WID == aufgabewid);
+            replanerdb.Aufgaben.RemoveAt(index);
+            if (replanerdb.selectedAufgabe != null && replanerdb.selectedAufgabe.WID == aufgabeModel.WID)
+            {
+                replanerdb.selectedAufgabe = replanerdb.Aufgaben.FirstOrDefault();
+            }
+            await replanerdb.SaveDatabase();
+            await JSRuntime.InvokeVoidAsync("history.back");
         }
-        int index = replanerdb.Aufgaben.FindIndex(aufgabe => aufgabe.WID == aufgabewid);
-        replanerdb.Aufgaben.RemoveAt(index);
-        if (replanerdb.selectedAufgabe != null && replanerdb.selectedAufgabe.WID == aufgabeModel.WID)
-        {
-            replanerdb.selectedAufgabe = replanerdb.Aufgaben.FirstOrDefault();
-        }
-        await replanerdb.SaveDatabase();
-        await JSRuntime.InvokeVoidAsync("history.back");
     }
 }
