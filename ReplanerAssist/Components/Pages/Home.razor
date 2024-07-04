@@ -58,7 +58,7 @@ else
                             <ul style="list-style-type:disc">
                                 @if (termin.PersonenListe.Count != 0)
                                 {
-                                    @foreach (var person in termin.PersonenListe)
+                                    @foreach (var person in termin.PersonenListe.OrderBy(p => p.Vorname ?? p.Nachname))
                                     {
                                         <li>@person.Vorname @person.Nachname</li>
                                     }

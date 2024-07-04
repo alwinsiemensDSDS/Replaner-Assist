@@ -40,7 +40,7 @@ else
                 </h5>
             </div>
             <div class="container-fluid overflow-auto" style="height: calc(100vh - 550px)">
-            @foreach (var person in selectedAufgabe.PersonenListe)
+                @foreach (var person in selectedAufgabe.PersonenListe.OrderBy(p => p.Vorname ?? p.Nachname))
             {
                 <div class="form-check text-light">
                     <input type="radio"

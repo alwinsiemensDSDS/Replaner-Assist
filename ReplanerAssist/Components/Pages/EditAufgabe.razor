@@ -50,7 +50,7 @@ else
         else
         {
             <div class="container-fluid overflow-auto" style="max-height: calc(100vh - 550px)">
-                @foreach (var person in replanerdb.Personen)
+                @foreach (var person in replanerdb.Personen.OrderBy(p => p.Vorname ?? p.Nachname))
                 {
                     <div class="form-check text-light">
                         <input type="radio"
